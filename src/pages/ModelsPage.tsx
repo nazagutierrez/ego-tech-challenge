@@ -80,7 +80,7 @@ export default function ModelsPage() {
 
   return (
     <div className="mx-auto px-4 lg:px-8 py-12">
-      <h1 className="text-2xl sm:text-4xl text-title lg:text-5xl font-bold mb-8 mt-5">Descubrí todos los modelos</h1>
+      <h1 className="text-3xl sm:text-4xl text-title lg:text-5xl font-bold mb-8 mt-5">Descubrí todos los modelos</h1>
 
       <FilterBar
         loading={loading}

@@ -120,7 +120,7 @@ export default function FilterBar({
         </div>
 
         {/* Filtrar para mobile */}
-        <div className="flex md:hidden flex-wrap items-center gap-2">
+        <div className="flex md:hidden flex-wrap items-center justify-center gap-2">
           <label className="w-22 text-center text-sm font-medium text-foreground whitespace-nowrap">
             Filtrar por
           </label>
@@ -176,7 +176,7 @@ export default function FilterBar({
 
 
         {/* Ordenar para web y mobile*/}
-        <div className="flex items-center flex-wrap gap-2">
+        <div className="flex items-center justify-center flex-wrap gap-2">
           <label htmlFor="sort" className="w-22 text-sm font-medium text-foreground whitespace-nowrap">
             Ordenar por
           </label>
