@@ -99,7 +99,7 @@ export default function FilterBar({
             Array.from({ length: 4 }).map((_, index) => (
               <div
                 key={index}
-                className="h-8 w-20 bg-[#e4e4e4] rounded-full animate-pulse"
+                className="h-8 w-20 bg-skeleton rounded-full animate-pulse"
               ></div>
             ))
             :
@@ -173,7 +173,6 @@ export default function FilterBar({
             )}
           </div>
         </div>
-
 
         {/* Ordenar para web y mobile*/}
         <div className="flex items-center justify-center flex-wrap gap-2">

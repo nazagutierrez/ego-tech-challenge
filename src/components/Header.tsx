@@ -10,17 +10,17 @@ export default function Header() {
   return (
     <>
       <header className="border-b border-border">
-        <div className="container mx-auto px-8">
+        <div className="mx-auto px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-8">
+            <div className="flex h-full items-center gap-8">
               <Link to="/" >
                 <img src="/logo-ego.png" alt="EGO" className="w-full h-full" />
               </Link>
 
-              <nav className="hidden md:flex gap-8">
+              <nav className="hidden self-end md:flex gap-8">
                 <Link
                   to="/"
-                  className={`text-sm font-medium pb-4 border-b-2 transition-colors ${
+                  className={`text-sm px-8 pb-4.5 font-medium border-b-3 transition-colors ${
                     !isDetailPage
                       ? "text-foreground border-accent"
                       : "text-muted-foreground border-transparent hover:text-foreground"
@@ -30,7 +30,7 @@ export default function Header() {
                 </Link>
 
                 <button
-                  className={`text-sm font-medium pb-4 border-b-2 transition-colors ${
+                  className={`text-sm px-8 pb-4.5 font-medium border-b-3 transition-colors ${
                     isDetailPage
                       ? "text-foreground border-accent"
                       : "text-muted-foreground border-transparent hover:text-foreground"
@@ -43,10 +43,10 @@ export default function Header() {
 
             <button
               onClick={() => setIsOpen(true)}
-              className="flex items-center gap-2 text-foreground cursor-pointer"
+              className="flex items-center gap-2 text-foreground cursor-pointer group"
             >
               <span className="hidden md:inline text-sm font-medium">Menú</span>
-              <HiMenu className="w-6 h-6" />
+              <HiMenu className="w-6 h-6 group-hover:text-accent transition-all duration-200" />
             </button>
           </div>
         </div>
@@ -66,17 +66,17 @@ export default function Header() {
         `}
       >
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between p-6 border-b-2 border-muted-hover">
+          <div className="flex items-center justify-between md:justify-end p-6 border-b-2 border-muted-hover sm:border-0">
             <Link to="/" className="md:hidden">
               <img src="/logo-ego.png" alt="EGO" className="w-full h-full" />
             </Link>
 
-            <button onClick={() => setIsOpen(false)}>
+            <button className="hover:text-accent transition-all duration-200" onClick={() => setIsOpen(false)}>
               <HiX className="w-7 h-7 cursor-pointer" />
             </button>
           </div>
 
-          <nav className="bg-[#EFEEEF] flex flex-1 font-medium text-end flex-col overflow-y-auto">
+          <nav className="bg-[#EFEEEF] flex flex-1 text-lg text-end flex-col overflow-y-auto">
             <div className="flex bg-white flex-col gap-5 p-6">
               <Link
                 to="/"

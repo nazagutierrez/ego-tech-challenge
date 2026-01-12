@@ -7,6 +7,7 @@ import { formatPrice } from "../utils/formatters"
 import LoadingSpinner from "../components/LoadingSpinner"
 import ErrorMessage from "../components/ErrorMessage"
 import FeatureCarousel from "../components/FeatureCarousel"
+import { HiChevronLeft } from "react-icons/hi"
 
 export default function ModelDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -38,39 +39,48 @@ export default function ModelDetailPage() {
     }
   }
 
-  if (loading) return <LoadingSpinner />
-  if (error) return <ErrorMessage message={error} />
-  if (!model) return <ErrorMessage message="Model not found" />
 
   return (
     <div className="pb-16">
-      <div className="bg-muted/30">
-        <div className="container mx-auto px-4 lg:px-8 py-12">
+      <div className="">
+        <div className="container mx-auto px-4 lg:px-8 pt-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
-              <img src={model.photo || "/placeholder.svg"} alt={model.name} className="w-full h-auto object-contain" />
+              {
+                loading ? 
+                <div className="bg-skeleton mb-18.5 mt-40 animate-pulse rounded w-full h-[300px]"></div>
+                :
+                <img src={model?.photo} alt={model?.name} className="aspect-video sm:aspect-4/3 w-full h-auto object-contain" />
+              }
             </div>
             <div className="order-1 lg:order-2">
-              <p className="text-sm text-muted-foreground mb-2">{model.name}</p>
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">{model.title}</h1>
-              <div
-                className="text-foreground/80 leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: model.description }}
-              />
-              <div className="mt-6">
-                <p className="text-2xl font-bold text-foreground">{formatPrice(model.price)}</p>
-                <p className="text-sm text-muted-foreground mt-1">Año {model.year}</p>
-              </div>
+              {
+                loading ? 
+                  <div className="flex w-full gap-y-6 mt-4 justify-center items-start flex-col">
+                    <div className="bg-skeleton animate-pulse rounded w-16 h-5"></div>
+                    <div className="bg-skeleton animate-pulse rounded w-3/4 h-28"></div>
+                    <div className="bg-skeleton animate-pulse rounded w-40 h-4"></div>
+                  </div>
+                :
+                <>
+                  <p className="text-lg font-medium mb-2">{model?.name}</p>
+                  <h1 className="text-4xl md:text-5xl text-title font-semibold text-foreground mb-6 leading-tight">{model?.title}</h1>
+                  <div
+                    className="text-foreground/80 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: model?.description || "" }}
+                  />
+                </>
+              }
             </div>
           </div>
         </div>
       </div>
 
-      {model.model_features && model.model_features.length > 0 && <FeatureCarousel features={model.model_features} />}
+      <FeatureCarousel loading={loading} features={model?.model_features} />
 
-      {model.model_highlights && model.model_highlights.length > 0 && (
+      {model?.model_highlights && model?.model_highlights.length > 0 && (
         <div className="container mx-auto px-4 lg:px-8 py-16">
-          {model.model_highlights.map((highlight, index) => (
+          {model?.model_highlights.map((highlight, index) => (
             <div
               key={index}
               className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16 ${

@@ -92,17 +92,17 @@ export default function ModelsPage() {
       />
 
       <div className="h-screen">
-        <div className="grid h-fit grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-6 gap-x-10 mt-12">
+        <div className="grid h-fit grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-y-6 gap-x-10 mt-12">
           {
             loading ? 
               Array.from({ length: 8 }).map((_, index) => (
                 <div
                   key={index}
-                  className="h-[338px] w-[365px] flex gap-y-2 justify-center items-center flex-col animate-pulse"
+                  className="flex w-full gap-y-2 justify-center items-center flex-col"
                 >
-                  <div className="bg-[#c4c4c4] animate-pulse rounded w-28 h-7"></div>
-                  <div className="bg-[#c4c4c4] animate-pulse rounded w-40 h-4"></div>
-                  <div className="bg-[#c4c4c4] animate-pulse rounded w-[338px] h-[254.5px]"></div>
+                  <div className="bg-skeleton animate-pulse rounded w-28 h-7"></div>
+                  <div className="bg-skeleton animate-pulse rounded w-40 h-4"></div>
+                  <div className="bg-skeleton animate-pulse rounded w-full max-w-[338px] h-[254.5px]"></div>
                 </div>
               ))
             :

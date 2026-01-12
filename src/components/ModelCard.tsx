@@ -9,7 +9,7 @@ interface ModelCardProps {
 
 export default function ModelCard({ model }: ModelCardProps) {
   return (
-    <div className="group h-fit">
+    <Link to={`/modelo/${model.id}`} className="group h-fit">
       <div className="relative overflow-hidden bg-card">
         <div className="text-center mb-4">
           <h3 className="text-2xl font-bold group-hover:text-accent transition-colors mb-2">{model.name}</h3>
@@ -36,6 +36,6 @@ export default function ModelCard({ model }: ModelCardProps) {
           </Link>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
