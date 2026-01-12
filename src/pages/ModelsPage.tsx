@@ -1,19 +1,18 @@
-"use client"
-
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef, useLayoutEffect } from "react"
 import type { CarModel, SortOption } from "../types"
 import ModelCard from "../components/ModelCard"
 import FilterBar from "../components/FilterBar"
-import LoadingSpinner from "../components/LoadingSpinner"
 import ErrorMessage from "../components/ErrorMessage"
+import gsap from "gsap"
 
 export default function ModelsPage() {
   const [models, setModels] = useState<CarModel[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedSegments, setSelectedSegments] = useState<string[]>([])
-  const [selectedYears, setSelectedYears] = useState<number[]>([])
   const [sortBy, setSortBy] = useState<string>("")
+
+  const gridRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetchModels()
@@ -40,20 +39,11 @@ export default function ModelsPage() {
     return uniqueSegments.sort()
   }, [models])
 
-  const years = useMemo(() => {
-    const uniqueYears = Array.from(new Set(models.map((m) => m.year)))
-    return uniqueYears.sort((a, b) => b - a)
-  }, [models])
-
   const filteredAndSortedModels = useMemo(() => {
     let filtered = models
 
     if (selectedSegments.length > 0) {
       filtered = filtered.filter((model) => selectedSegments.includes(model.segment))
-    }
-
-    if (selectedYears.length > 0) {
-      filtered = filtered.filter((model) => selectedYears.includes(model.year))
     }
 
     const sorted = [...filtered]
@@ -73,10 +63,44 @@ export default function ModelsPage() {
     }
 
     return sorted
-  }, [models, selectedSegments, selectedYears, sortBy])
+  }, [models, selectedSegments, sortBy])
+
+  useLayoutEffect(() => {
+    if (!gridRef.current || loading) return
+
+    const ctx = gsap.context(() => {
+      const cards = gridRef.current!.children
+
+      gsap.set(cards, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+      })
+
+      gsap.fromTo(
+        cards,
+        {
+          opacity: 0,
+          y: 30,
+          scale: 0.95,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.6,
+          ease: "power3.out",
+          stagger: 0.06,
+          clearProps: "all",
+        }
+      )
+    }, gridRef)
+
+    return () => ctx.revert()
+  }, [filteredAndSortedModels, loading])
+  
 
   if (error) return <ErrorMessage message={error} />
-
 
   return (
     <div className="mx-auto px-4 lg:px-8 py-12">
@@ -92,13 +116,13 @@ export default function ModelsPage() {
       />
 
       <div className="h-screen">
-        <div className="grid h-fit grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-y-6 gap-x-10 mt-12">
+        <div ref={gridRef} className="grid h-fit grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-y-2 gap-x-10 mt-12">
           {
             loading ? 
               Array.from({ length: 8 }).map((_, index) => (
                 <div
                   key={index}
-                  className="flex w-full gap-y-2 justify-center items-center flex-col"
+                  className="flex w-full mb-10 sm:mb-24 gap-y-2 justify-center items-center flex-col"
                 >
                   <div className="bg-skeleton animate-pulse rounded w-28 h-7"></div>
                   <div className="bg-skeleton animate-pulse rounded w-40 h-4"></div>

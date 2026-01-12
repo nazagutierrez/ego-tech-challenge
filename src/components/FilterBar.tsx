@@ -1,7 +1,6 @@
-"use client"
-
 import { useEffect, useRef, useState } from "react"
 import { ChevronDown } from 'lucide-react';
+import gsap from "gsap"
 
 interface FilterBarProps {
   loading?: boolean
@@ -24,6 +23,72 @@ export default function FilterBar({
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null)
   const filterDropdownRef = useRef<HTMLDivElement | null>(null)
+  const sortListRef = useRef<HTMLUListElement | null>(null)
+  const filterListRef = useRef<HTMLUListElement | null>(null)
+
+  useEffect(() => {
+    if (!sortListRef.current) return
+
+    if (isOpen) {
+      gsap.fromTo(
+        sortListRef.current,
+        {
+          height: 0,
+          opacity: 0,
+          y: -8,
+        },
+        {
+          height: "auto",
+          opacity: 1,
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out",
+          pointerEvents: "auto",
+        }
+      )
+    } else {
+      gsap.to(sortListRef.current, {
+        height: 0,
+        opacity: 0,
+        y: -8,
+        duration: 0.2,
+        ease: "power2.in",
+        pointerEvents: "none",
+      })
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (!filterListRef.current) return
+
+    if (isFilterOpen) {
+      gsap.fromTo(
+        filterListRef.current,
+        {
+          height: 0,
+          opacity: 0,
+          y: -8,
+        },
+        {
+          height: "auto",
+          opacity: 1,
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out",
+          pointerEvents: "auto",
+        }
+      )
+    } else {
+      gsap.to(filterListRef.current, {
+        height: 0,
+        opacity: 0,
+        y: -8,
+        duration: 0.2,
+        ease: "power2.in",
+        pointerEvents: "none",
+      })
+    }
+  }, [isFilterOpen])
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -88,7 +153,7 @@ export default function FilterBar({
           <span className="text-sm font-semibold text-foreground">Filtrar por</span>
           <button
             onClick={() => toggleSegment("Todos")}
-            className={`px-4 py-1.5 rounded-full text-sm hover:bg-muted-hover transition-colors ${
+            className={`px-4 py-1.5 rounded-full cursor-pointer text-sm hover:bg-muted-hover transition-colors ${
               isAllSelected ? "bg-muted" : ""
             }`}
           >
@@ -107,7 +172,7 @@ export default function FilterBar({
               <button
                 key={segment}
                 onClick={() => toggleSegment(segment)}
-                className={`px-4 py-1.5 rounded-full text-sm hover:bg-muted-hover transition-colors ${
+                className={`px-4 py-1.5 rounded-full cursor-pointer text-sm hover:bg-muted-hover transition-colors ${
                   selectedSegments.includes(segment)
                     ? "bg-muted"
                     : ""
@@ -138,39 +203,37 @@ export default function FilterBar({
               />
             </button>
 
-            {isFilterOpen && (
-              <ul className="absolute overflow-hidden z-10 mt-1 w-full bg-white rounded-md divide-y divide-border shadow-[0_10px_35px_0_rgba(0,0,0,0.25)]">
-                <li
-                  onClick={() => toggleSegment("Todos")}
-                  className={`
-                    px-3 py-2 text-sm cursor-pointer
-                    hover:bg-muted
-                    ${selectedSegments.length === 0 ? "bg-muted font-medium" : ""}
-                  `}
-                >
-                  Todos
-                </li>
+            <ul ref={filterListRef} style={{ height: 0, opacity: 0, pointerEvents: "none" }} className="absolute overflow-hidden z-10 mt-1 w-full bg-white rounded-md divide-y divide-border shadow-[0_10px_35px_0_rgba(0,0,0,0.25)]">
+              <li
+                onClick={() => toggleSegment("Todos")}
+                className={`
+                  px-3 py-2 text-sm cursor-pointer
+                  hover:bg-muted
+                  ${selectedSegments.length === 0 ? "bg-muted font-medium" : ""}
+                `}
+              >
+                Todos
+              </li>
 
-                {segments.map(segment => {
-                  const isSelected = selectedSegments.includes(segment)
+              {segments.map(segment => {
+                const isSelected = selectedSegments.includes(segment)
 
-                  return (
-                    <li
-                      key={segment}
-                      onClick={() => toggleSegment(segment)}
-                      className={`
-                        px-3 py-2 text-sm cursor-pointer
-                        hover:bg-muted flex justify-between items-center
-                        ${isSelected ? "bg-muted font-medium" : ""}
-                      `}
-                    >
-                      {segment}
-                      {isSelected && <span>✓</span>}
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
+                return (
+                  <li
+                    key={segment}
+                    onClick={() => toggleSegment(segment)}
+                    className={`
+                      px-3 py-2 text-sm cursor-pointer
+                      hover:bg-muted flex justify-between items-center
+                      ${isSelected ? "bg-muted font-medium" : ""}
+                    `}
+                  >
+                    {segment}
+                    {isSelected && <span>✓</span>}
+                  </li>
+                )
+              })}
+            </ul>
           </div>
         </div>
 
@@ -188,31 +251,29 @@ export default function FilterBar({
               <span><ChevronDown className={`${isOpen ? "rotate-180" : ""} h-4 w-4 transition-transform`} /></span>
             </button>
 
-            {isOpen && (
-              <ul className="absolute overflow-hidden divide-y divide-border z-10 mt-1 w-full bg-white rounded-md shadow-[0_10px_35px_0_rgba(0,0,0,0.25)]">
-                {options.map(opt => {
-                  const isSelected = opt.value === sortBy
+            <ul ref={sortListRef} style={{ height: 0, opacity: 0, pointerEvents: "none" }} className="absolute overflow-hidden divide-y divide-border z-10 mt-1 w-full bg-white rounded-md shadow-[0_10px_35px_0_rgba(0,0,0,0.25)]">
+              {options.map(opt => {
+                const isSelected = opt.value === sortBy
 
-                  return (
-                    <li
-                      key={opt.value}
-                      onClick={() => {
-                        onSortChange(opt.value)
-                        setIsOpen(false)
-                      }}
-                      className={`
-                        px-3 py-2 text-sm cursor-pointer
-                        transition-colors
-                        hover:bg-muted
-                        ${isSelected ? "bg-muted font-medium" : ""}
-                      `}
-                    >
-                      {opt.label}
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
+                return (
+                  <li
+                    key={opt.value}
+                    onClick={() => {
+                      onSortChange(opt.value)
+                      setIsOpen(false)
+                    }}
+                    className={`
+                      px-3 py-2 text-sm cursor-pointer
+                      transition-colors
+                      hover:bg-muted
+                      ${isSelected ? "bg-muted font-medium" : ""}
+                    `}
+                  >
+                    {opt.label}
+                  </li>
+                )
+              })}
+            </ul>
           </div>
         </div>
       </div>
