@@ -38,7 +38,7 @@ export default function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      className="fixed top-0 left-0 z-[9999]
+      className="fixed top-0 left-0 z-[9999] custom-cursor
                  h-5 w-5 rounded-full border border-accent
                  pointer-events-none
                  -translate-x-1/2 -translate-y-1/2"
