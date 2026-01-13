@@ -114,7 +114,7 @@ export default function FeatureCarousel({
               modules={[Navigation, Pagination, A11y]}
               pagination={{
                 clickable: true,
-                renderBullet: (index, className) => {
+                renderBullet: (_index, className) => {
                   return `
                     <button class="${className} custom-bullet">
                       <span></span>
