@@ -13,14 +13,14 @@ export default function ModelCard({ model }: ModelCardProps) {
 
   return (
     <Link to={`/modelo/${model.id}`} className="group h-fit">
-      <div className="relative overflow-hidden bg-card">
+      <div className="relative overflow-hidden bg-card px-5">
         <div className="text-center mb-4">
           <h3 className="text-3xl font-semibold group-hover:text-accent transition-colors mb-2">{model.name}</h3>
           <p className="text-sm text-muted-foreground">
             {model.year} | {formatPrice(model.price)}
           </p>
         </div>
-        <div className="aspect-video h-[230px] sm:aspect-4/3 relative">
+        <div className="aspect-video min-h-[230px] sm:aspect-4/3 relative">
           {!imageLoaded && (
             <div className="bg-skeleton animate-pulse rounded w-full h-full" />
           )}

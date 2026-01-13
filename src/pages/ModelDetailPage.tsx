@@ -95,7 +95,6 @@ useLayoutEffect(() => {
     }
   }
 
-
   return (
     <div ref={pageRef} className="pb-6">
       <div className="mx-auto px-4 lg:px-8 pt-12">

@@ -2,13 +2,11 @@ import { useState, useEffect, useMemo, useRef, useLayoutEffect } from "react"
 import type { CarModel, SortOption } from "../types"
 import ModelCard from "../components/ModelCard"
 import FilterBar from "../components/FilterBar"
-import ErrorMessage from "../components/ErrorMessage"
 import gsap from "gsap"
 
 export default function ModelsPage() {
   const [models, setModels] = useState<CarModel[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [selectedSegments, setSelectedSegments] = useState<string[]>([])
   const [sortBy, setSortBy] = useState<string>("")
 
@@ -27,9 +25,7 @@ export default function ModelsPage() {
       }
       const data = await response.json()
       setModels(data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
-    } finally {
+    } catch (err) { console.log(err) } finally {
       setLoading(false)
     }
   }
@@ -100,8 +96,6 @@ export default function ModelsPage() {
   }, [filteredAndSortedModels, loading])
   
 
-  if (error) return <ErrorMessage message={error} />
-
   return (
     <div className="mx-auto px-4 lg:px-8 py-12">
       <h1 className="text-3xl sm:text-4xl text-title lg:text-5xl font-bold mb-8 mt-5">Descubrí todos los modelos</h1>
@@ -115,7 +109,7 @@ export default function ModelsPage() {
         onSortChange={setSortBy}
       />
 
-      <div className="h-screen">
+      <div className="h-full">
         <div ref={gridRef} className="grid h-fit grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-y-2 gap-x-10 mt-12">
           {
             loading ? 

@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom"
-import { HiMenu, HiX } from "react-icons/hi"
 import { useState } from "react"
+import { Menu, X } from "lucide-react"
 
 export default function Header() {
   const location = useLocation()
@@ -46,7 +46,7 @@ export default function Header() {
               className="flex items-center gap-2 text-foreground cursor-pointer group"
             >
               <span className="hidden md:inline text-sm font-medium">Menú</span>
-              <HiMenu className="w-6 h-6 group-hover:text-accent transition-all duration-200" />
+              <Menu className="w-6 h-6 group-hover:text-accent transition-all duration-200" />
             </button>
           </div>
         </div>
@@ -72,7 +72,7 @@ export default function Header() {
             </Link>
 
             <button className="hover:text-accent transition-all duration-200" onClick={() => setIsOpen(false)}>
-              <HiX className="w-7 h-7 cursor-pointer" />
+              <X className="w-7 h-7 cursor-pointer" />
             </button>
           </div>
 
