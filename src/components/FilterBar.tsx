@@ -3,20 +3,20 @@ import Filters from "./filters/Filters";
 
 interface FilterBarProps {
   loading?: boolean;
-  segments: string[];
-  selectedSegments: string[];
-  onSegmentChange: (segments: string[]) => void;
+  tags: string[];
+  selectedTags: string[];
+  setSelectedTags: (tags: string[]) => void;
   sortBy: string;
-  onSortChange: (sort: string) => void;
+  setSortBy: (sort: string) => void;
 }
 
 export default function FilterBar({
   loading,
-  segments,
-  selectedSegments,
-  onSegmentChange,
+  tags,
+  selectedTags,
+  setSelectedTags,
   sortBy,
-  onSortChange,
+  setSortBy,
 }: FilterBarProps) {
   return (
     <div className="border-b border-border pt-6 pb-2">
@@ -24,13 +24,13 @@ export default function FilterBar({
         {/* Filtrar para web y mobile */}
         <Filters
           loading={loading}
-          segments={segments}
-          selectedSegments={selectedSegments}
-          onSegmentChange={onSegmentChange}
+          tags={tags}
+          selectedTags={selectedTags}
+          setSelectedTags={setSelectedTags}
         />
 
         {/* Ordenar para web y mobile*/}
-        <OrderBy sortBy={sortBy} onSortChange={onSortChange} />
+        <OrderBy sortBy={sortBy} setSortBy={setSortBy} />
       </div>
     </div>
   );

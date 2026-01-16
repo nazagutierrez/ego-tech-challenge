@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useLayoutEffect } from "react"
-import type { CarModel, SortOption } from "../types"
+import type { CarModel } from "../types"
 import ModelCard from "../components/ModelCard"
 import FilterBar from "../components/FilterBar"
 import gsap from "gsap"
@@ -7,7 +7,7 @@ import gsap from "gsap"
 export default function ModelsPage() {
   const [models, setModels] = useState<CarModel[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedSegments, setSelectedSegments] = useState<string[]>([])
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [sortBy, setSortBy] = useState<string>("")
 
   const gridRef = useRef<HTMLDivElement>(null)
@@ -30,36 +30,27 @@ export default function ModelsPage() {
     }
   }
 
-  const segments = useMemo(() => {
-    const uniqueSegments = Array.from(new Set(models.map((m) => m.segment)))
-    return uniqueSegments.sort()
+  const tags = useMemo(() => {
+    const uniqueTags = Array.from(new Set(models.map((m) => m.segment)))
+    return uniqueTags.sort()
   }, [models])
 
+  const SORT_FUNCTIONS: Record<string, (a: CarModel, b: CarModel) => number> = {
+    "price-asc": (a, b) => a.price - b.price,
+    "price-desc": (a, b) => b.price - a.price,
+    "year-newest": (a, b) => b.year - a.year,
+    "year-oldest": (a, b) => a.year - b.year,
+  };
+
   const filteredAndSortedModels = useMemo(() => {
-    let filtered = models
+    let filtered = selectedTags.length > 0
+      ? models.filter((model) => selectedTags.includes(model.segment))
+      : models;
 
-    if (selectedSegments.length > 0) {
-      filtered = filtered.filter((model) => selectedSegments.includes(model.segment))
-    }
-
-    const sorted = [...filtered]
-    switch (sortBy as SortOption) {
-      case "price-asc":
-        sorted.sort((a, b) => a.price - b.price)
-        break
-      case "price-desc":
-        sorted.sort((a, b) => b.price - a.price)
-        break
-      case "year-newest":
-        sorted.sort((a, b) => b.year - a.year)
-        break
-      case "year-oldest":
-        sorted.sort((a, b) => a.year - b.year)
-        break
-    }
-
-    return sorted
-  }, [models, selectedSegments, sortBy])
+    if (!sortBy || !SORT_FUNCTIONS[sortBy]) return filtered;
+    
+    return [...filtered].sort(SORT_FUNCTIONS[sortBy]);
+  }, [models, selectedTags, sortBy])
 
   useLayoutEffect(() => {
     if (!gridRef.current || loading) return
@@ -67,19 +58,11 @@ export default function ModelsPage() {
     const ctx = gsap.context(() => {
       const cards = gridRef.current!.children
 
-      gsap.set(cards, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-      })
+      gsap.set(cards, { opacity: 1, y: 0, scale: 1 })
 
       gsap.fromTo(
         cards,
-        {
-          opacity: 0,
-          y: 30,
-          scale: 0.95,
-        },
+        { opacity: 0, y: 30, scale: 0.95 },
         {
           opacity: 1,
           y: 0,
@@ -102,11 +85,11 @@ export default function ModelsPage() {
 
       <FilterBar
         loading={loading}
-        segments={segments}
-        selectedSegments={selectedSegments}
-        onSegmentChange={setSelectedSegments}
+        tags={tags}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
         sortBy={sortBy}
-        onSortChange={setSortBy}
+        setSortBy={setSortBy}
       />
 
       <div className="h-full">
